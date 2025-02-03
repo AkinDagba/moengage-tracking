@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Evento</title>
+</head>
+<body>
+    <script>
+        async function sendEvent(eventType, userId) {
+            const apiUrl = "https://api-02.moengage.com/v1/event/5DS2Z3HRZNEBSH5IG04V2YZE";
+            const apiKey = "5DS2Z3HRZNEBSH5IG04V2YZE"; // Substitua pela chave da API
+
+            const eventData = {
+                event: eventType,
+                type: "click",
+                userId: userId
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(eventData)
+                });
+
+                const result = await response.json();
+                console.log(result);
+
+                if (response.ok) {
+                    alert("Evento registrado com sucesso!");
+                } else {
+                    alert("Erro ao registrar evento: " + result.error.message);
+                }
+            } catch (error) {
+                console.error("Erro:", error);
+            }
+        }
+
+        // Pegando os parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventType = urlParams.get("event");
+        const userId = urlParams.get("userId");
+
+        if (eventType && userId) {
+            sendEvent(eventType, userId);
+        } else {
+            alert("Erro: Parâmetros ausentes.");
+        }
+    </script>
+</body>
+</html>
